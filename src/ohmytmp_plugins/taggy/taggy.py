@@ -7,16 +7,15 @@ ALL = '/all'
 
 class Taggy(PluginAfter):
     def __init__(self) -> None:
+        super().__init__()
         self.data = dict()
         self.data[ALL] = set()
 
-        def __func(info: Info):
-            for i in info.to_taglist():
-                self.data.setdefault(i, set())
-                self.data[i].add(info.SRC)
-            self.data[ALL] = set()
-
-        super().__init__(__func)
+    def func(self, info: Info):
+        for i in info.to_taglist():
+            self.data.setdefault(i, set())
+            self.data[i].add(info.SRC)
+        self.data[ALL].add(info.SRC)
 
     def get(self, k: str) -> set:
         return self.data.get(k, set())
